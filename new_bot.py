@@ -131,8 +131,8 @@ async def on_startup(dp):
     scheduler.add_job(
         send_report,
         'cron',
-        hour=20,
-        minute=30,
+        hour=22,
+        minute=10,
         misfire_grace_time=120  # До 2 минут задержки допустимы
     )
     scheduler.start()
