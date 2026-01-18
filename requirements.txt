@@ -1,0 +1,5 @@
+aiogram==2.25.1
+python-dotenv
+apscheduler
+gspread
+oauth2client
