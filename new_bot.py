@@ -36,7 +36,6 @@ storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 scheduler = AsyncIOScheduler()
 
-import json
 from oauth2client.service_account import ServiceAccountCredentials
 
 def init_google_sheets():
