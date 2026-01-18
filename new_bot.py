@@ -139,5 +139,13 @@ async def on_startup(dp):
     logger.info("Бот запущен. Ожидает команды или расписания...")
 
 if __name__ == '__main__':
-    from aiogram import executor
-    executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
+    import os, asyncio
+
+    # Если запуск из GitHub Actions — просто отправляем отчёт и выходим
+    if os.getenv("GITHUB_ACTIONS") == "true":
+        asyncio.run(send_report())
+    else:
+        # Обычный режим — бот работает постоянно
+        from aiogram import executor
+        executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
+
