@@ -35,15 +35,28 @@ storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 scheduler = AsyncIOScheduler()
 
+import json
+from oauth2client.service_account import ServiceAccountCredentials
+
 def init_google_sheets():
     try:
-        scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-        creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SHEETS_CREDS, scope)
+        scope = [
+            'https://spreadsheets.google.com/feeds',
+            'https://www.googleapis.com/auth/drive'
+        ]
+
+        creds_json = os.getenv("GOOGLE_SHEETS_CREDS")
+        creds_dict = json.loads(creds_json)
+
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
         client = gspread.authorize(creds)
+
         return client.open_by_key(SPREADSHEET_ID)
+
     except Exception as e:
         logger.error(f"Google Sheets initialization error: {str(e)}")
         raise
+
 
 async def get_report_data():
     try:
