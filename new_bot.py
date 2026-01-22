@@ -45,17 +45,19 @@ def init_google_sheets():
             'https://www.googleapis.com/auth/drive'
         ]
 
-        creds_json = os.getenv("GOOGLE_SHEETS_CREDS")
-        creds_dict = json.loads(creds_json)
+        creds = ServiceAccountCredentials.from_json_keyfile_name(
+            os.getenv("GOOGLE_SHEETS_CREDS"),
+            scope
+        )
 
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
         client = gspread.authorize(creds)
-
         return client.open_by_key(SPREADSHEET_ID)
 
     except Exception as e:
         logger.error(f"Google Sheets initialization error: {str(e)}")
         raise
+
+
 
 
 async def get_report_data():
@@ -131,6 +133,8 @@ async def send_report():
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
     await message.answer("Бот для отчетов запущен. Используйте /report для получения сегодняшнего отчета.")
+
+
 
 @dp.message_handler(commands=['report'])
 async def cmd_report(message: types.Message):
