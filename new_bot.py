@@ -45,8 +45,11 @@ def init_google_sheets():
             'https://www.googleapis.com/auth/drive'
         ]
 
-        creds = ServiceAccountCredentials.from_json_keyfile_name(
-            os.getenv("GOOGLE_SHEETS_CREDS"),
+        creds_json = os.getenv("GOOGLE_SHEETS_CREDS")
+        creds_dict = json.loads(creds_json)
+
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(
+            creds_dict,
             scope
         )
 
@@ -56,6 +59,7 @@ def init_google_sheets():
     except Exception as e:
         logger.error(f"Google Sheets initialization error: {str(e)}")
         raise
+
 
 
 
