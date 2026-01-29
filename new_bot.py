@@ -128,11 +128,17 @@ async def get_report_data():
 async def send_report():
     try:
         report = await get_report_data()
+
         for chat_id in ADMIN_CHAT_IDS:
-            await bot.send_message(chat_id, report, parse_mode='Markdown')
+            try:
+                await bot.send_message(chat_id, report, parse_mode='Markdown')
+            except Exception as e:
+                logger.error(f"Не удалось отправить отчет в чат {chat_id}: {e}")
+
         logger.info(f"Отчет за {datetime.now().strftime('%d.%m.%Y')} успешно отправлен")
+
     except Exception as e:
-        logger.error(f"Ошибка при отправке отчета: {str(e)}")
+        logger.error(f"Ошибка при формировании отчета: {str(e)}")
 
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message):
